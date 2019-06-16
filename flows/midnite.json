@@ -43,7 +43,7 @@
         "type": "function",
         "z": "ee7f2777.a9d7b8",
         "name": "FormatPvAmps",
-        "func": "msg.payload = msg.payload[0]/10\nreturn msg;",
+        "func": "msg.payload = msg.payload[0]/10;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 369.6667022705078,
@@ -81,8 +81,8 @@
         "tostatus": false,
         "complete": "payload",
         "targetType": "msg",
-        "x": 584.6666069030762,
-        "y": 245.33337879180908,
+        "x": 582.6666259765625,
+        "y": 231.3333740234375,
         "wires": []
     },
     {
@@ -90,16 +90,16 @@
         "type": "function",
         "z": "ee7f2777.a9d7b8",
         "name": "FormatBatVolts",
-        "func": "msg.payload = msg.payload[0]/10;\nmsg.load ={}\nmsg.load.volts = msg.payload;\nreturn msg;",
+        "func": "msg.payload = msg.payload[0]/10;\nmsg.load = {};\nmsg.load.volts = msg.payload;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 368.6666603088379,
-        "y": 265.6667175292969,
+        "x": 373.6666564941406,
+        "y": 258.6667175292969,
         "wires": [
             [
                 "73b0bfa0.e9097",
-                "f8c9f288.8841e",
-                "68889552.844a1c"
+                "68889552.844a1c",
+                "f8c9f288.8841e"
             ]
         ]
     },
@@ -282,7 +282,7 @@
         "type": "function",
         "z": "ee7f2777.a9d7b8",
         "name": "getConsumedAmps",
-        "func": "msg.amps.consumed = msg.amps.bat - msg.amps.whz;\nmsg.payload = msg.amps.consumed;\nmsg.load = {}\nmsg.load.amps = msg.amps.comsumed\nreturn msg;",
+        "func": "msg.payload = msg.amps.bat - msg.amps.whz;\nmsg.load = {};\nmsg.load.amps = msg.payload;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 736.66650390625,
@@ -307,8 +307,8 @@
         "y": 268.66668701171875,
         "wires": [
             [
-                "9fdf3572.240568",
-                "766326a0.2931d8"
+                "766326a0.2931d8",
+                "9fdf3572.240568"
             ]
         ]
     },
@@ -379,7 +379,7 @@
         "type": "debug",
         "z": "ee7f2777.a9d7b8",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -490,10 +490,10 @@
         "x": 154.3333282470703,
         "y": 259.3333730697632,
         "wires": [
-            [],
             [
                 "3b23b841.6c5028"
-            ]
+            ],
+            []
         ]
     },
     {
@@ -509,7 +509,7 @@
         "dataType": "HoldingRegister",
         "adr": "4116",
         "quantity": "3",
-        "rate": "1",
+        "rate": "5",
         "rateUnit": "s",
         "delayOnStart": false,
         "startDelayTime": "",
@@ -629,7 +629,7 @@
         "dataType": "HoldingRegister",
         "adr": "4370",
         "quantity": "3",
-        "rate": "1",
+        "rate": "5",
         "rateUnit": "s",
         "delayOnStart": false,
         "startDelayTime": "",
@@ -914,7 +914,7 @@
         "type": "debug",
         "z": "ee7f2777.a9d7b8",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -989,7 +989,7 @@
         "type": "debug",
         "z": "ee7f2777.a9d7b8",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1064,7 +1064,7 @@
         "type": "debug",
         "z": "ee7f2777.a9d7b8",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1168,10 +1168,10 @@
         "z": "ee7f2777.a9d7b8",
         "name": "",
         "mode": "custom",
-        "build": "array",
+        "build": "merged",
         "property": "load",
         "propertyType": "msg",
-        "key": "topic",
+        "key": "load",
         "joiner": "\\n",
         "joinerType": "str",
         "accumulate": false,
@@ -1186,9 +1186,24 @@
         "y": 268,
         "wires": [
             [
-                "ea99cee9.cf523"
+                "ea99cee9.cf523",
+                "d79777dc.5bf7b8"
             ]
         ]
+    },
+    {
+        "id": "d79777dc.5bf7b8",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 1157.5,
+        "y": 310,
+        "wires": []
     },
     {
         "id": "b3aa924b.8ed39",
@@ -1208,10 +1223,10 @@
         "serialStopbits": "1",
         "serialParity": "none",
         "serialConnectionDelay": "100",
-        "unit_id": "1",
-        "commandDelay": "1",
-        "clientTimeout": "1000",
-        "reconnectTimeout": "2000"
+        "unit_id": 1,
+        "commandDelay": 1,
+        "clientTimeout": 1000,
+        "reconnectTimeout": 2000
     },
     {
         "id": "bc68be3d.ca79d",
