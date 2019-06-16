@@ -1,5 +1,109 @@
 [
     {
+        "id": "ee7f2777.a9d7b8",
+        "type": "tab",
+        "label": "Midnite Classic",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "8729b7c0.a41758",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 571.1666412353516,
+        "y": 40.66670322418213,
+        "wires": []
+    },
+    {
+        "id": "369af097.430a2",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "FormatPvVolts",
+        "func": "msg.payload = msg.payload[0]/10\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 371.1666793823242,
+        "y": 61.66669273376465,
+        "wires": [
+            [
+                "8729b7c0.a41758",
+                "d09b30ae.1128e"
+            ]
+        ]
+    },
+    {
+        "id": "4b6caf85.e267c",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "FormatPvAmps",
+        "func": "msg.payload = msg.payload[0]/10;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 369.6667022705078,
+        "y": 170.0000410079956,
+        "wires": [
+            [
+                "1a0899dc.eabe76",
+                "14b7fcc6.898093"
+            ]
+        ]
+    },
+    {
+        "id": "1a0899dc.eabe76",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 582.9999656677246,
+        "y": 141.66671323776245,
+        "wires": []
+    },
+    {
+        "id": "73b0bfa0.e9097",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 582.6666259765625,
+        "y": 231.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "3b23b841.6c5028",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "FormatBatVolts",
+        "func": "msg.payload = msg.payload[0]/10;\nmsg.load = {};\nmsg.load.volts = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 373.6666564941406,
+        "y": 258.6667175292969,
+        "wires": [
+            [
+                "73b0bfa0.e9097",
+                "68889552.844a1c",
+                "f8c9f288.8841e"
+            ]
+        ]
+    },
+    {
         "id": "24b4a414.2c2e2c",
         "type": "function",
         "z": "ee7f2777.a9d7b8",
@@ -15,5 +119,1125 @@
                 "63e4d785.030cb8"
             ]
         ]
+    },
+    {
+        "id": "f68617a0.81e298",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 562.8571166992187,
+        "y": 336.33334159851074,
+        "wires": []
+    },
+    {
+        "id": "1aabc400.ce213c",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "getsChargeState",
+        "func": "// Create new Buffer based on array bytes\nconst buf = Buffer.from(msg.responseBuffer.buffer);\n\n// Represent these bytes as 8-bit unsigned int\nconst value = buf.readInt8();\n\n// save the value\nmsg.bufferReadValue = value\n\n\nswitch (value)\n{\n    case 0:\n        msg.payload = \"Resting\";\n        break;\n    case 3:\n        msg.payload = \"Absorb\";\n        break;\n    case 4:\n        msg.payload = \"Bulk Mppt\";\n        break;\n    case 5:\n        msg.payload = \"Float\";\n        break;\n    case 6:\n        msg.payload = \"Float Mppt\";\n        break;\n    case 7:\n        msg.payload = \"Equalize\";\n        break;\n    case 10:\n        msg.payload = \"Hyper Voc\";\n        break;\n    case 18:\n        msg.payload = \"Resting\";\n        break;\n    default:\n        msg.payload = \"Eq Mppt\";\n        break;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 380.57152557373047,
+        "y": 352.4762210845947,
+        "wires": [
+            [
+                "f68617a0.81e298",
+                "2d80a73c.f03998"
+            ]
+        ]
+    },
+    {
+        "id": "53fc8a60.7e8a04",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 580.6666221618652,
+        "y": 428.0000343322754,
+        "wires": []
+    },
+    {
+        "id": "cc25f49.7363608",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "FormatWatts",
+        "func": "msg.payload = msg.payload[0]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 359.6666793823242,
+        "y": 451.0000295639038,
+        "wires": [
+            [
+                "53fc8a60.7e8a04",
+                "e7944190.dfd85"
+            ]
+        ]
+    },
+    {
+        "id": "2c71b0d1.c8d98",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 562.3333854675293,
+        "y": 524.6667289733887,
+        "wires": []
+    },
+    {
+        "id": "3f4a7d2d.4473e2",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "FormatKwH",
+        "func": "msg.payload = msg.payload[0]/10\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 363.0951271057129,
+        "y": 551.904727935791,
+        "wires": [
+            [
+                "2c71b0d1.c8d98",
+                "80c7cd45.5015a"
+            ]
+        ]
+    },
+    {
+        "id": "9eddb69e.d388f8",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "formatAmps",
+        "func": "// Create new Buffer based on array bytes\nconst buf = Buffer.from(msg.responseBuffer.buffer);\n\n// Represent these bytes as 8-bit unsigned int\nconst value = buf.readInt16BE();\n\n// save the value\nmsg.payload = value/10;\nmsg.amps = {};\nmsg.amps.whz = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 341.4285430908203,
+        "y": 738.0952568054199,
+        "wires": [
+            [
+                "63e4d785.030cb8",
+                "e946ed37.3046d",
+                "92a2962e.04e2e8"
+            ]
+        ]
+    },
+    {
+        "id": "8b1eb1ed.ce22e",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 541.4286766052246,
+        "y": 865.2381944656372,
+        "wires": []
+    },
+    {
+        "id": "63e4d785.030cb8",
+        "type": "join",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "mode": "custom",
+        "build": "merged",
+        "property": "amps",
+        "propertyType": "msg",
+        "key": "amps",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 567.8333740234375,
+        "y": 684.6666870117187,
+        "wires": [
+            [
+                "128daa5b.3b9856"
+            ]
+        ]
+    },
+    {
+        "id": "128daa5b.3b9856",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "getConsumedAmps",
+        "func": "msg.payload = msg.amps.bat - msg.amps.whz;\nmsg.load = {};\nmsg.load.amps = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 736.66650390625,
+        "y": 682.666748046875,
+        "wires": [
+            [
+                "7f32de8.62fc22",
+                "9aabb9aa.961ed8",
+                "68889552.844a1c"
+            ]
+        ]
+    },
+    {
+        "id": "ea99cee9.cf523",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "getConsumedWatts",
+        "func": "msg.payload = msg.load.volts * msg.load.amps;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1169.333251953125,
+        "y": 268.66668701171875,
+        "wires": [
+            [
+                "766326a0.2931d8",
+                "9fdf3572.240568"
+            ]
+        ]
+    },
+    {
+        "id": "7f32de8.62fc22",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 951.1666259765625,
+        "y": 683.6666259765625,
+        "wires": []
+    },
+    {
+        "id": "766326a0.2931d8",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1476.3332824707031,
+        "y": 317.999906539917,
+        "wires": []
+    },
+    {
+        "id": "92a2962e.04e2e8",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 545.2381744384766,
+        "y": 812.3810358047485,
+        "wires": []
+    },
+    {
+        "id": "eb129f96.dd4bd",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "formatSOC",
+        "func": "msg.payload = msg.payload[0];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 349.16666412353515,
+        "y": 883.3333673477173,
+        "wires": [
+            [
+                "8b1eb1ed.ce22e",
+                "72ac2718.4e2a18"
+            ]
+        ]
+    },
+    {
+        "id": "f872ac79.661b",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 542.5,
+        "y": 948.3333320617676,
+        "wires": []
+    },
+    {
+        "id": "293f4d74.8c0272",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "formatRemainingAH",
+        "func": "msg.payload = msg.payload[0];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 343.3332977294922,
+        "y": 959.9999771118164,
+        "wires": [
+            [
+                "f872ac79.661b",
+                "662edef.173892"
+            ]
+        ]
+    },
+    {
+        "id": "46bdfbec.d06204",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "Controller PV Volts",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4115",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 144.8333511352539,
+        "y": 67.00002861022949,
+        "wires": [
+            [
+                "369af097.430a2"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "cb71e911.c07448",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "Controller PV Amps",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4120",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 148.33334350585937,
+        "y": 172.3333740234375,
+        "wires": [
+            [
+                "4b6caf85.e267c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "28132e20.262412",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "Controller Battery Volts",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4114",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 154.3333282470703,
+        "y": 259.3333730697632,
+        "wires": [
+            [
+                "3b23b841.6c5028"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d77beefb.0824d",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "Controller Battery Amps",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4116",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 154.66671752929687,
+        "y": 637.3333129882812,
+        "wires": [
+            [
+                "24b4a414.2c2e2c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "c0c5edc3.6b49e",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "Controller Chage State",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4119",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 159.33335876464844,
+        "y": 352,
+        "wires": [
+            [
+                "1aabc400.ce213c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "71bf0f4f.6e158",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "Controller Watts In",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4118",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 145.33334350585937,
+        "y": 459,
+        "wires": [
+            [
+                "cc25f49.7363608"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e33ae063.2f90b",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "Controller kWh",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4117",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 144,
+        "y": 558.0000610351562,
+        "wires": [
+            [
+                "3f4a7d2d.4473e2"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "bbb8fde7.57ccd",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "WhizJr Amps",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4370",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 135.80953979492187,
+        "y": 742.2857055664062,
+        "wires": [
+            [
+                "9eddb69e.d388f8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "daedb24f.aaf03",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "SOC",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4372",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 110.47618865966797,
+        "y": 888.0952882766724,
+        "wires": [
+            [
+                "eb129f96.dd4bd"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "db28940e.f221c8",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "RemainingAH",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4376",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 129.99999237060547,
+        "y": 966.6666259765625,
+        "wires": [
+            [
+                "293f4d74.8c0272"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d09b30ae.1128e",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertPvVoltsTbl",
+        "measurement": "pvVoltsTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 597.8332633972168,
+        "y": 81.00004005432129,
+        "wires": []
+    },
+    {
+        "id": "14b7fcc6.898093",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertPvAmpsTbl",
+        "measurement": "pvAmpsTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 600.9999656677246,
+        "y": 192.66671323776245,
+        "wires": []
+    },
+    {
+        "id": "f8c9f288.8841e",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertBatVoltsTbl",
+        "measurement": "batVoltsTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 601.6666069030762,
+        "y": 288.3333787918091,
+        "wires": []
+    },
+    {
+        "id": "d1643ff9.89fd",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertBatAmpsTbl",
+        "measurement": "batAmpsTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 603.666748046875,
+        "y": 625.666748046875,
+        "wires": []
+    },
+    {
+        "id": "e7944190.dfd85",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertwattsInTbl",
+        "measurement": "wattsInTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 591.6666221618652,
+        "y": 471.0000343322754,
+        "wires": []
+    },
+    {
+        "id": "2d80a73c.f03998",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "stateOfChargeTbl",
+        "measurement": "stateOfChargeTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 603.857177734375,
+        "y": 379.0476379394531,
+        "wires": []
+    },
+    {
+        "id": "80c7cd45.5015a",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertkWhTbl",
+        "measurement": "kWhTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 580.9523849487305,
+        "y": 569.0476913452148,
+        "wires": []
+    },
+    {
+        "id": "e946ed37.3046d",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertWhzAmpsTbl",
+        "measurement": "whzAmpsTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 579.9999389648437,
+        "y": 770.0000429153442,
+        "wires": []
+    },
+    {
+        "id": "9aabb9aa.961ed8",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertConsumedAmpsTbl",
+        "measurement": "consumedAmpsTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 1001,
+        "y": 723,
+        "wires": []
+    },
+    {
+        "id": "9fdf3572.240568",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertConsumedWattsTbl",
+        "measurement": "consumedWattsTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 1536.333351135254,
+        "y": 274.6665782928467,
+        "wires": []
+    },
+    {
+        "id": "72ac2718.4e2a18",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertSocTbl",
+        "measurement": "socTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 558.3333206176758,
+        "y": 906.6666212081909,
+        "wires": []
+    },
+    {
+        "id": "662edef.173892",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertRemainingAhTbl",
+        "measurement": "remainingAhTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 591.6666679382324,
+        "y": 986.6666212081909,
+        "wires": []
+    },
+    {
+        "id": "8b67ea48.f471f8",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "Battery Temp",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4131",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 130.5,
+        "y": 1073,
+        "wires": [
+            [
+                "8134f840.2decb8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8134f840.2decb8",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "formatBatteryTemp",
+        "func": "msg.payload = (9/5)*(msg.payload[0]/10)+32;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 335.5,
+        "y": 1074,
+        "wires": [
+            [
+                "82b1b32c.70af3",
+                "db79f549.ea3848"
+            ]
+        ]
+    },
+    {
+        "id": "82b1b32c.70af3",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 520.5,
+        "y": 1052,
+        "wires": []
+    },
+    {
+        "id": "db79f549.ea3848",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertBatteryTemp",
+        "measurement": "batteryTemp",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 551.5,
+        "y": 1093,
+        "wires": []
+    },
+    {
+        "id": "9096f673.0270b8",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "FET Temp",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4132",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 118,
+        "y": 1176,
+        "wires": [
+            [
+                "5672ab89.d97904"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "5672ab89.d97904",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "formatBatteryTemp",
+        "func": "msg.payload = (9/5)*(msg.payload[0]/10)+32;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 333,
+        "y": 1177,
+        "wires": [
+            [
+                "382cf2e.5f61a0e",
+                "e4bfddf5.8dbcb"
+            ]
+        ]
+    },
+    {
+        "id": "382cf2e.5f61a0e",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 518,
+        "y": 1155,
+        "wires": []
+    },
+    {
+        "id": "e4bfddf5.8dbcb",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertFETTemp",
+        "measurement": "fetTemp",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 539,
+        "y": 1196,
+        "wires": []
+    },
+    {
+        "id": "a3ebee13.77ff6",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "PCB Temp",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4133",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 120,
+        "y": 1285,
+        "wires": [
+            [
+                "6589cee1.c0f4a"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "6589cee1.c0f4a",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "formatBatteryTemp",
+        "func": "msg.payload = (9/5)*(msg.payload[0]/10)+32;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 335,
+        "y": 1286,
+        "wires": [
+            [
+                "cd1aa28c.1c664",
+                "1ab68dab.df01d2"
+            ]
+        ]
+    },
+    {
+        "id": "cd1aa28c.1c664",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 520,
+        "y": 1264,
+        "wires": []
+    },
+    {
+        "id": "1ab68dab.df01d2",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertPCBTemp",
+        "measurement": "pcbTemp",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 541,
+        "y": 1305,
+        "wires": []
+    },
+    {
+        "id": "703712dd.abc11c",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 566.3332901000976,
+        "y": 1383,
+        "wires": []
+    },
+    {
+        "id": "9b44017c.cc3aa",
+        "type": "function",
+        "z": "ee7f2777.a9d7b8",
+        "name": "FormatPvVolts",
+        "func": "msg.payload = msg.payload[0]/10\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 366.3333282470703,
+        "y": 1403.9999895095825,
+        "wires": [
+            [
+                "703712dd.abc11c",
+                "df1d3fa7.79ca2"
+            ]
+        ]
+    },
+    {
+        "id": "bfa9d75b.ef5b48",
+        "type": "modbus-read",
+        "z": "ee7f2777.a9d7b8",
+        "name": "Voc",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "10",
+        "dataType": "HoldingRegister",
+        "adr": "4121",
+        "quantity": "3",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "b3aa924b.8ed39",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 120,
+        "y": 1405.3333740234375,
+        "wires": [
+            [
+                "9b44017c.cc3aa"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "df1d3fa7.79ca2",
+        "type": "influxdb out",
+        "z": "ee7f2777.a9d7b8",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "insertVocTbl",
+        "measurement": "pvVocTbl",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 582.9999122619629,
+        "y": 1423.3333368301391,
+        "wires": []
+    },
+    {
+        "id": "68889552.844a1c",
+        "type": "join",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "mode": "custom",
+        "build": "merged",
+        "property": "load",
+        "propertyType": "msg",
+        "key": "load",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 988.5,
+        "y": 268,
+        "wires": [
+            [
+                "ea99cee9.cf523",
+                "d79777dc.5bf7b8"
+            ]
+        ]
+    },
+    {
+        "id": "d79777dc.5bf7b8",
+        "type": "debug",
+        "z": "ee7f2777.a9d7b8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 1157.5,
+        "y": 310,
+        "wires": []
+    },
+    {
+        "id": "b3aa924b.8ed39",
+        "type": "modbus-client",
+        "z": "",
+        "name": "Classic 150",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "tcpHost": "192.168.1.140",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "unit_id": 1,
+        "commandDelay": 1,
+        "clientTimeout": 1000,
+        "reconnectTimeout": 2000
+    },
+    {
+        "id": "bc68be3d.ca79d",
+        "type": "influxdb",
+        "z": "",
+        "hostname": "192.168.1.114",
+        "port": "8086",
+        "protocol": "http",
+        "database": "solar",
+        "name": "",
+        "usetls": false,
+        "tls": ""
     }
 ]
