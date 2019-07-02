@@ -1,0 +1,1994 @@
+[
+    {
+        "id": "f0883d8e.25286",
+        "type": "tab",
+        "label": "Schneider SW Inverter",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "6215d255.7d019c",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 559.3332901000976,
+        "y": 30,
+        "wires": []
+    },
+    {
+        "id": "8f3ff22c.0769f",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Convert to string",
+        "func": "switch (msg.payload[0])\n{\n    case 1024:\n        msg.payload = \"Invert\";\n        break;\n    case 1025:\n        msg.payload = \"AC Pass Through\";\n        break;\n    case 1026:\n        msg.payload = \"APS Only\";\n        break;\n    case 1027:\n        msg.payload = \"Load Sense\";\n        break;\n    case 1028:\n        msg.payload = \"Inverter Disabled\";\n        break;\n    case 1029:\n        msg.payload = \"Load Sense Ready\";\n        break;\n    case 1030:\n        msg.payload = \"Engaging Inverter\";\n        break;\n    case 1031:\n        msg.payload = \"Inverter Fault\";\n        break;\n    case 1032:\n        msg.payload = \"Inverter Standby\";\n        break;\n    case 1033:\n        msg.payload = \"Grid Tied\";\n        break;\n    case 1034:\n        msg.payload = \"Grid Support\";\n        break;\n    case 1035:\n        msg.payload = \"Gen Support\";\n        break;\n    case 1036:\n        msg.payload = \"Sell-to-Grid\";\n        break;\n    case 1037:\n        msg.payload = \"Load Shaving\";\n        break;\n    case 1038:\n        msg.payload = \"Grid Frequency Stabilization\";\n        break;\n    case 1039:\n        msg.payload = \"AC Coupling\";\n        break;\n    case 1040:\n        msg.payload = \"Reverse Ibatt\";\n        break;\n    default:\n        msg.payload = \"Unknown\";\n        break;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 359.3333282470703,
+        "y": 50.99998950958252,
+        "wires": [
+            [
+                "6215d255.7d019c",
+                "6fc867f7.df2b38"
+            ]
+        ]
+    },
+    {
+        "id": "e575c447.b10048",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "SW Inverter Enabled",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "75",
+        "quantity": "1",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 153,
+        "y": 52.3333740234375,
+        "wires": [
+            [
+                "8f3ff22c.0769f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "6fc867f7.df2b38",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_inverterStatus",
+        "measurement": "sw_inverterStatus",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 599.9999389648437,
+        "y": 70.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "7a86e71f.2f6de8",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 592.3333129882812,
+        "y": 124,
+        "wires": []
+    },
+    {
+        "id": "a5b0970.c712d68",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 385.3333282470703,
+        "y": 137.99998950958252,
+        "wires": [
+            [
+                "7a86e71f.2f6de8",
+                "147e4e64.2a09d2"
+            ]
+        ]
+    },
+    {
+        "id": "dcf219f9.fec948",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "SW Battery Voltage",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "78",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 149,
+        "y": 139.3333740234375,
+        "wires": [
+            [
+                "a5b0970.c712d68"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "147e4e64.2a09d2",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_batteryVoltage",
+        "measurement": "sw_batteryVoltage",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 634.9999389648437,
+        "y": 169.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "37291499.4f5aac",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 596.3333129882812,
+        "y": 206,
+        "wires": []
+    },
+    {
+        "id": "50c3353d.f2d00c",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "SW Battery Current",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "80",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 143,
+        "y": 224.3333740234375,
+        "wires": [
+            [
+                "b57d405f.3e6ac"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "7323c3c4.5294ec",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_batteryCurrent",
+        "measurement": "sw_batteryCurrent",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 638.9999389648437,
+        "y": 238.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "8758e5f2.ffd038",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 595.3332901000976,
+        "y": 275,
+        "wires": []
+    },
+    {
+        "id": "2b0a1774.dccd38",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "SW Battery Power",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "82",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 134,
+        "y": 305.3333740234375,
+        "wires": [
+            [
+                "31e4ce5d.d331b2"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a5e2b902.5fd5b8",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_batteryPower",
+        "measurement": "sw_batteryPower",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 635.9999389648437,
+        "y": 315.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "c1e8b633.a3ecc8",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 591.333251953125,
+        "y": 357,
+        "wires": []
+    },
+    {
+        "id": "8f968e76.b0019",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Convert to Farenheit",
+        "func": "msg.payload=(msg.payload[0]/100-273)*(9/5)+32;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 390.33331298828125,
+        "y": 384,
+        "wires": [
+            [
+                "c1e8b633.a3ecc8",
+                "1970b0f0.024f4f"
+            ]
+        ]
+    },
+    {
+        "id": "e8f8086f.a52e88",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "SW Battery Temperature",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "84",
+        "quantity": "1",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 148.99998474121094,
+        "y": 385.333384513855,
+        "wires": [
+            [
+                "8f968e76.b0019"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "1970b0f0.024f4f",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_batteryTemperature",
+        "measurement": "sw_batteryTemperature",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 656.9999389648437,
+        "y": 403.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "b57d405f.3e6ac",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 390,
+        "y": 220,
+        "wires": [
+            [
+                "37291499.4f5aac",
+                "7323c3c4.5294ec"
+            ]
+        ]
+    },
+    {
+        "id": "31e4ce5d.d331b2",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits signed integer",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 390,
+        "y": 304,
+        "wires": [
+            [
+                "a5e2b902.5fd5b8",
+                "8758e5f2.ffd038"
+            ]
+        ]
+    },
+    {
+        "id": "ea9d3b95.faf838",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 594.3332672119141,
+        "y": 464,
+        "wires": []
+    },
+    {
+        "id": "c9b69703.7ead78",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "SW DC Current",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "86",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 122,
+        "y": 492.333384513855,
+        "wires": [
+            [
+                "c0a52913.750b68"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8d5fc7bb.a0f2a8",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_invertDCCurrent",
+        "measurement": "sw_invertDCCurrent",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 649.9999542236328,
+        "y": 510.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "41a939fb.5aa6d8",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 593.3332672119141,
+        "y": 553,
+        "wires": []
+    },
+    {
+        "id": "89f5a4e7.ff9dc8",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "SW DC Power",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "88",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 111,
+        "y": 581.333384513855,
+        "wires": [
+            [
+                "c817fda2.5d273"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "316245f3.f493aa",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_invertDCPower",
+        "measurement": "sw_invertDCPower",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 638.9999542236328,
+        "y": 599.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "15af2598.458e2a",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 599.3332672119141,
+        "y": 637,
+        "wires": []
+    },
+    {
+        "id": "edc8bd95.6e4e",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "SW AC1 Frequency",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "95",
+        "quantity": "1",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 137,
+        "y": 665.333384513855,
+        "wires": [
+            [
+                "a33e5acc.e55e48"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "813b809b.8fdaa",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_AC1Frequency",
+        "measurement": "sw_AC1Frequency",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 644.9999542236328,
+        "y": 683.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "cb52f057.5670e",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 604.3332672119141,
+        "y": 734,
+        "wires": []
+    },
+    {
+        "id": "1eecb50f.c8ce9b",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "SW AC1 Voltage",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "96",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 132,
+        "y": 762.333384513855,
+        "wires": [
+            [
+                "891f3c63.949cf"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "63b01647.2e1a18",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_AC1Voltage",
+        "measurement": "sw_AC1Voltage",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 639.9999542236328,
+        "y": 780.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "b9d19218.f0239",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 599.3332672119141,
+        "y": 839,
+        "wires": []
+    },
+    {
+        "id": "390af175.db031e",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_AC1InputCurrent",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "98",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 137,
+        "y": 867.333384513855,
+        "wires": [
+            [
+                "eedabb62.d25428"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "88fa6448.d3d668",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_AC1InputCurrent",
+        "measurement": "sw_AC1InputCurrent",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 654.9999542236328,
+        "y": 885.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "a33e5acc.e55e48",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Divide by 100",
+        "func": "msg.payload=msg.payload[0]/100;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 369,
+        "y": 664,
+        "wires": [
+            [
+                "15af2598.458e2a",
+                "813b809b.8fdaa"
+            ]
+        ]
+    },
+    {
+        "id": "c0a52913.750b68",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 378,
+        "y": 490,
+        "wires": [
+            [
+                "ea9d3b95.faf838",
+                "8d5fc7bb.a0f2a8"
+            ]
+        ]
+    },
+    {
+        "id": "c817fda2.5d273",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 353,
+        "y": 578,
+        "wires": [
+            [
+                "41a939fb.5aa6d8",
+                "316245f3.f493aa"
+            ]
+        ]
+    },
+    {
+        "id": "891f3c63.949cf",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 369,
+        "y": 762,
+        "wires": [
+            [
+                "cb52f057.5670e",
+                "63b01647.2e1a18"
+            ]
+        ]
+    },
+    {
+        "id": "eedabb62.d25428",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /-1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000;\nmsg.payload=msg.payload*-1;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 376,
+        "y": 864,
+        "wires": [
+            [
+                "b9d19218.f0239",
+                "88fa6448.d3d668"
+            ]
+        ]
+    },
+    {
+        "id": "1b2543f6.4219bc",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 592.333251953125,
+        "y": 946,
+        "wires": []
+    },
+    {
+        "id": "f7eba745.7358f8",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_AC1InputPower",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "100",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 137,
+        "y": 972.333384513855,
+        "wires": [
+            [
+                "27d0a78c.d4a778"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "da04bd66.f0a1c",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_AC1InputPower",
+        "measurement": "sw_AC1InputPower",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 644.9999542236328,
+        "y": 990.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "85f6e8d3.f44488",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 581.3332672119141,
+        "y": 1032,
+        "wires": []
+    },
+    {
+        "id": "fa028f0a.294a2",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_AC1L1Voltage",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "104",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 119,
+        "y": 1060.333384513855,
+        "wires": [
+            [
+                "cce312d4.978d8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e3a76af0.4914c8",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_AC1L1Voltage",
+        "measurement": "sw_AC1L1Voltage",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 626.9999542236328,
+        "y": 1078.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "27d0a78c.d4a778",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer *-1",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload*-1;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 368,
+        "y": 968,
+        "wires": [
+            [
+                "1b2543f6.4219bc",
+                "da04bd66.f0a1c"
+            ]
+        ]
+    },
+    {
+        "id": "cce312d4.978d8",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 380,
+        "y": 1057,
+        "wires": [
+            [
+                "85f6e8d3.f44488",
+                "e3a76af0.4914c8"
+            ]
+        ]
+    },
+    {
+        "id": "6afc1cd2.4b9264",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 586.3332672119141,
+        "y": 1136,
+        "wires": []
+    },
+    {
+        "id": "d141bc5.d5a154",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_AC1L1Current",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "110",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 124,
+        "y": 1164.333384513855,
+        "wires": [
+            [
+                "5e78b713.53ed18"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4d60e716.838238",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_AC1L1Current",
+        "measurement": "sw_AC1L1Current",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 631.9999542236328,
+        "y": 1182.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "5e78b713.53ed18",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 385,
+        "y": 1161,
+        "wires": [
+            [
+                "6afc1cd2.4b9264",
+                "4d60e716.838238"
+            ]
+        ]
+    },
+    {
+        "id": "8c04256b.4095d8",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 589.3332672119141,
+        "y": 1244.000111579895,
+        "wires": []
+    },
+    {
+        "id": "c7aa2fa7.84774",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_AC1L2Voltage",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "108",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 127,
+        "y": 1272.33349609375,
+        "wires": [
+            [
+                "953cb2ab.58331"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f1849fa8.5616b",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_AC1L2Voltage",
+        "measurement": "sw_AC1L2Voltage",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 634.9999542236328,
+        "y": 1290.3334856033325,
+        "wires": []
+    },
+    {
+        "id": "953cb2ab.58331",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 388,
+        "y": 1269.000111579895,
+        "wires": [
+            [
+                "8c04256b.4095d8",
+                "f1849fa8.5616b"
+            ]
+        ]
+    },
+    {
+        "id": "c9cb5e6c.c582d",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 592.333251953125,
+        "y": 1438,
+        "wires": []
+    },
+    {
+        "id": "4ca18446.2dad6c",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_LoadOutputEnergyToday",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "220",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 146,
+        "y": 1471.33349609375,
+        "wires": [
+            [
+                "9cff13f0.d43c9"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4ca47c7d.54dee4",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_LoadOutputEnergyToday",
+        "measurement": "sw_LoadOutputEnergyToday",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 666,
+        "y": 1485.33349609375,
+        "wires": []
+    },
+    {
+        "id": "9cff13f0.d43c9",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000;\nmsg.energy={};\nmsg.energy.output=msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 385,
+        "y": 1474.000111579895,
+        "wires": [
+            [
+                "c9cb5e6c.c582d",
+                "4ca47c7d.54dee4",
+                "2bb94349.bb28ac"
+            ]
+        ]
+    },
+    {
+        "id": "5482a837.5c2b78",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 588.3332672119141,
+        "y": 1338.000111579895,
+        "wires": []
+    },
+    {
+        "id": "9058aad4.fff4c8",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_AC1L2Current",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "106",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 126,
+        "y": 1366.33349609375,
+        "wires": [
+            [
+                "28e060b3.87ff3"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "56dc5455.6f247c",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_AC1L2Current",
+        "measurement": "sw_AC1L2Current",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 633.9999542236328,
+        "y": 1384.3334856033325,
+        "wires": []
+    },
+    {
+        "id": "28e060b3.87ff3",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 387,
+        "y": 1363.000111579895,
+        "wires": [
+            [
+                "5482a837.5c2b78",
+                "56dc5455.6f247c"
+            ]
+        ]
+    },
+    {
+        "id": "881034e.11555c8",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 638.333251953125,
+        "y": 1558,
+        "wires": []
+    },
+    {
+        "id": "4208ab3b.0eed74",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_LoadOutputEnergyWeek",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "224",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 147,
+        "y": 1595.333384513855,
+        "wires": [
+            [
+                "14083f2e.bb8701"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "fd73a529.42ab98",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_LoadOutputEnergyWeek",
+        "measurement": "sw_LoadOutputEnergyWeek",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 712,
+        "y": 1605.33349609375,
+        "wires": []
+    },
+    {
+        "id": "14083f2e.bb8701",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 421,
+        "y": 1598,
+        "wires": [
+            [
+                "881034e.11555c8",
+                "fd73a529.42ab98"
+            ]
+        ]
+    },
+    {
+        "id": "43d0ab74.17b6a4",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 645.333251953125,
+        "y": 1671.0000104904174,
+        "wires": []
+    },
+    {
+        "id": "fdba766c.633b98",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_LoadOutputEnergyMonth",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "228",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 153,
+        "y": 1710.33349609375,
+        "wires": [
+            [
+                "c1dd67f8.9a29f8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "fbc31941.252718",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_LoadOutputEnergyMonth",
+        "measurement": "sw_LoadOutputEnergyMonth",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 719,
+        "y": 1718.3335065841674,
+        "wires": []
+    },
+    {
+        "id": "c1dd67f8.9a29f8",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 438,
+        "y": 1707.0001220703125,
+        "wires": [
+            [
+                "43d0ab74.17b6a4",
+                "fbc31941.252718"
+            ]
+        ]
+    },
+    {
+        "id": "a1f05e0e.e0dfc",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 655.333251953125,
+        "y": 1763.0000104904174,
+        "wires": []
+    },
+    {
+        "id": "d432045e.109f88",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_LoadOutputEnergyYear",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "232",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 163,
+        "y": 1802.33349609375,
+        "wires": [
+            [
+                "b1674955.fe09c8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "32a497d1.ddf348",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_LoadOutputEnergyYear",
+        "measurement": "sw_LoadOutputEnergyYear",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 729,
+        "y": 1810.3335065841674,
+        "wires": []
+    },
+    {
+        "id": "b1674955.fe09c8",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 448,
+        "y": 1799.0001220703125,
+        "wires": [
+            [
+                "a1f05e0e.e0dfc",
+                "32a497d1.ddf348"
+            ]
+        ]
+    },
+    {
+        "id": "9946c8b2.91a618",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 655.333251953125,
+        "y": 1856.0000104904174,
+        "wires": []
+    },
+    {
+        "id": "fd37388e.a8ee38",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_LoadOutputEnergyLifetime",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "236",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 173,
+        "y": 1895.33349609375,
+        "wires": [
+            [
+                "bf30fe4f.2f5aa"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "fbf5113d.04e45",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_LoadOutputEnergyLifetime",
+        "measurement": "sw_LoadOutputEnergyLifetime",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 733.9999389648437,
+        "y": 1905.3335065841674,
+        "wires": []
+    },
+    {
+        "id": "bf30fe4f.2f5aa",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 448,
+        "y": 1892.0001220703125,
+        "wires": [
+            [
+                "9946c8b2.91a618",
+                "fbf5113d.04e45"
+            ]
+        ]
+    },
+    {
+        "id": "6be3e8c9.2faaa8",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 611,
+        "y": 1984,
+        "wires": []
+    },
+    {
+        "id": "f0b2131c.a187d",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_FromBatteryEnergyToday",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "148",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 164.666748046875,
+        "y": 2017.33349609375,
+        "wires": [
+            [
+                "2671e055.43cd3"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e2fa841a.d02ec8",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_FromBatteryEnergyToday",
+        "measurement": "sw_FromBatteryEnergyToday",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 694.666748046875,
+        "y": 2031.33349609375,
+        "wires": []
+    },
+    {
+        "id": "2671e055.43cd3",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000;\nmsg.energy={};\nmsg.energy.battery=msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 403.666748046875,
+        "y": 2020.000111579895,
+        "wires": [
+            [
+                "6be3e8c9.2faaa8",
+                "e2fa841a.d02ec8",
+                "2bb94349.bb28ac"
+            ]
+        ]
+    },
+    {
+        "id": "72883dc9.4e4f44",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 657,
+        "y": 2104,
+        "wires": []
+    },
+    {
+        "id": "cd9e45.4f35a1b8",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_FromBatteryEnergyWeek",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "152",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 165.666748046875,
+        "y": 2141.333384513855,
+        "wires": [
+            [
+                "4c7773ca.95fabc"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "acca2ec0.7ffc6",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_FromBatteryEnergyWeek",
+        "measurement": "sw_FromBatteryEnergyWeek",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 730.666748046875,
+        "y": 2151.33349609375,
+        "wires": []
+    },
+    {
+        "id": "4c7773ca.95fabc",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 439.666748046875,
+        "y": 2144,
+        "wires": [
+            [
+                "72883dc9.4e4f44",
+                "acca2ec0.7ffc6"
+            ]
+        ]
+    },
+    {
+        "id": "3ee6eccd.fbdb54",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 664,
+        "y": 2217.0000104904175,
+        "wires": []
+    },
+    {
+        "id": "bf60fe0.2c1ed",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_FromBatteryEnergyMonth",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "156",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 171.666748046875,
+        "y": 2256.33349609375,
+        "wires": [
+            [
+                "4a64e930.e9e888"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "475b13a7.7b5afc",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_FromBatteryEnergyMonth",
+        "measurement": "sw_FromBatteryEnergyMonth",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 747.666748046875,
+        "y": 2264.3335065841675,
+        "wires": []
+    },
+    {
+        "id": "4a64e930.e9e888",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 456.666748046875,
+        "y": 2253.0001220703125,
+        "wires": [
+            [
+                "3ee6eccd.fbdb54",
+                "475b13a7.7b5afc"
+            ]
+        ]
+    },
+    {
+        "id": "b0503cdc.c4881",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 674,
+        "y": 2309.0000104904175,
+        "wires": []
+    },
+    {
+        "id": "c540e8f.a03de18",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_FromBatteryEnergyYear",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "160",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 181.666748046875,
+        "y": 2348.33349609375,
+        "wires": [
+            [
+                "bc16d519.e02148"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "101c4a32.6cc076",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_FromBatteryEnergyYear",
+        "measurement": "sw_FromBatteryEnergyYear",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 747.666748046875,
+        "y": 2356.3335065841675,
+        "wires": []
+    },
+    {
+        "id": "bc16d519.e02148",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 466.666748046875,
+        "y": 2345.0001220703125,
+        "wires": [
+            [
+                "b0503cdc.c4881",
+                "101c4a32.6cc076"
+            ]
+        ]
+    },
+    {
+        "id": "1cde1bca.5418c4",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 674,
+        "y": 2402.0000104904175,
+        "wires": []
+    },
+    {
+        "id": "e0188eab.b895d",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "sw_FromBatteryEnergyLifetime",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "236",
+        "quantity": "2",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 191.666748046875,
+        "y": 2441.33349609375,
+        "wires": [
+            [
+                "b04cd6da.db3d88"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a57c7d77.b72e7",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_FromBatteryEnergyLifetime",
+        "measurement": "sw_FromBatteryEnergyLifetime",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 752.6666870117187,
+        "y": 2451.3335065841675,
+        "wires": []
+    },
+    {
+        "id": "b04cd6da.db3d88",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Get 32 bits integer /1000",
+        "func": "msg.payload=((msg.payload[1]*65536)+msg.payload[0]);\nif (msg.payload>=Math.pow(2, 31)) {\n    msg.payload= msg.payload - Math.pow(2, 32);\n}\nmsg.payload=msg.payload/1000\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 466.666748046875,
+        "y": 2438.0001220703125,
+        "wires": [
+            [
+                "1cde1bca.5418c4",
+                "a57c7d77.b72e7"
+            ]
+        ]
+    },
+    {
+        "id": "c77afbcd.973558",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "getEnergyFromGrid",
+        "func": "msg.payload = msg.energy.output-msg.energy.battery;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1212,
+        "y": 1887,
+        "wires": [
+            [
+                "64e5b9ef.2a5728",
+                "78fc55c8.cc19fc"
+            ]
+        ]
+    },
+    {
+        "id": "64e5b9ef.2a5728",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1519.0000305175781,
+        "y": 1936.3332195281982,
+        "wires": []
+    },
+    {
+        "id": "78fc55c8.cc19fc",
+        "type": "influxdb out",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "name": "sw_EnergyFromGridToday",
+        "measurement": "sw_EnergyFromGridToday",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 1589.000099182129,
+        "y": 1892.999891281128,
+        "wires": []
+    },
+    {
+        "id": "2bb94349.bb28ac",
+        "type": "join",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "mode": "custom",
+        "build": "merged",
+        "property": "energy",
+        "propertyType": "msg",
+        "key": "load",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1011.166748046875,
+        "y": 1886.3333129882812,
+        "wires": [
+            [
+                "c77afbcd.973558"
+            ]
+        ]
+    },
+    {
+        "id": "bfeccbea.6c9668",
+        "type": "modbus-client",
+        "z": "",
+        "name": "Combox",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "tcpHost": "192.168.1.139",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "unit_id": 90,
+        "commandDelay": 1,
+        "clientTimeout": 1000,
+        "reconnectTimeout": 2000
+    },
+    {
+        "id": "bc68be3d.ca79d",
+        "type": "influxdb",
+        "z": "",
+        "hostname": "192.168.1.114",
+        "port": "8086",
+        "protocol": "http",
+        "database": "solar",
+        "name": "",
+        "usetls": false,
+        "tls": ""
+    }
+]
