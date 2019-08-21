@@ -1,0 +1,25 @@
+// Creates CQs for all measurements, this is the equivalent of a history table. Need to adjust with the name of your DB
+
+CREATE CONTINUOUS QUERY “1hconsumedWatts” ON “DBNAME” BEGIN SELECT mean(“value”) AS “value” INTO "oneYear"."consumedWattsPerHrsTbl” FROM "consumedWattsTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hwattsInTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."wattsInTblPerHrsTbl" FROM "wattsInTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hkWhTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."kWhTblPerHrsTbl" FROM "kWhTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hbatAmpsTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."batAmpsTblPerHrsTbl" FROM "batAmpsTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hbatVoltsTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."batVoltsTblPerHrsTbl" FROM "batVoltsTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hconsumedAmpsTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."consumedAmpsTblPerHrsTbl" FROM "consumedAmpsTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hpvAmpsTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."pvAmpsTblPerHrsTbl" FROM "pvAmpsTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hpvVoltsTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."pvVoltsTblPerHrsTbl" FROM "pvVoltsTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hremainingAhTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."remainingAhTblPerHrsTbl" FROM "remainingAhTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hsocTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."socTblPerHrsTbl" FROM "socTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hstateOfChargeTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."stateOfChargeTblPerHrsTbl" FROM "stateOfChargeTbl" GROUP BY time(60m) END
+
+CREATE CONTINUOUS QUERY "1hwhzAmpsTbl" ON "DBNAME" BEGIN SELECT mean("value") AS "value" INTO "oneYear"."whzAmpsTblPerHrsTbl" FROM "whzAmpsTbl" GROUP BY time(60m) END
