@@ -1,0 +1,6 @@
+// Just copy and paste retention policies, please note that you need to change DBNAME with the real name of your DB instance.
+
+// Create default retention policy to keep data only in 24hrs intervals
+CREATE RETENTION POLICY "oneDay" ON "DBNAME" DURATION 24h REPLICATION 1 DEFAULT
+// Remove information after 1 year.
+CREATE RETENTION POLICY "oneYear" ON "DBNAME" DURATION 52w REPLICATION 1
