@@ -1,0 +1,497 @@
+[
+    {
+        "id": "f0883d8e.25286",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "f1e2978f.ac32d8",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "AC Frequency",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "78",
+        "quantity": "1",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 95.5,
+        "y": 1101,
+        "wires": [
+            [
+                "c349c4b5.3d1f68"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "6fe7df0c.41732",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 457.5,
+        "y": 1093,
+        "wires": []
+    },
+    {
+        "id": "c349c4b5.3d1f68",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "divide by 100",
+        "func": "msg.payload = msg.payload[0]/100;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 288.5,
+        "y": 1096,
+        "wires": [
+            [
+                "6fe7df0c.41732"
+            ]
+        ]
+    },
+    {
+        "id": "c88e7f4b.e7c9a",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "L1 Voltage",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "80",
+        "quantity": "1",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 77,
+        "y": 1178,
+        "wires": [
+            [
+                "19fb5cca.161713"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "6f7c7c42.26d534",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 449,
+        "y": 1170,
+        "wires": []
+    },
+    {
+        "id": "19fb5cca.161713",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "divide by 10",
+        "func": "msg.payload = msg.payload[0]/10;\nmsg.v={};\nmsg.v.l1=msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 280,
+        "y": 1173,
+        "wires": [
+            [
+                "6f7c7c42.26d534",
+                "a0afe556.c554d8"
+            ]
+        ]
+    },
+    {
+        "id": "21c42d0c.74ab22",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "L2 Voltage",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "82",
+        "quantity": "1",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 79,
+        "y": 1248,
+        "wires": [
+            [
+                "aa1243b8.e3d05"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4de1b960.0d1e18",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 451,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "aa1243b8.e3d05",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "divide by 10",
+        "func": "msg.payload = msg.payload[0]/10;\nmsg.v={};\nmsg.v.l2=msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 282,
+        "y": 1243,
+        "wires": [
+            [
+                "4de1b960.0d1e18",
+                "a0afe556.c554d8"
+            ]
+        ]
+    },
+    {
+        "id": "a0afe556.c554d8",
+        "type": "join",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "mode": "custom",
+        "build": "merged",
+        "property": "v",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 610.5,
+        "y": 1199,
+        "wires": [
+            [
+                "10d1c22b.45097e"
+            ]
+        ]
+    },
+    {
+        "id": "10d1c22b.45097e",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Add voltages",
+        "func": "msg.payload=msg.v.l1+msg.v.l2;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 765.5,
+        "y": 1198,
+        "wires": [
+            [
+                "d81632ec.7a0fa"
+            ]
+        ]
+    },
+    {
+        "id": "d81632ec.7a0fa",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 934,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "813791e2.f87fc",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "Loads Power",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "94",
+        "quantity": "1",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 80,
+        "y": 1319,
+        "wires": [
+            [
+                "b5d1167c.d46dd8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "2c1cffca.e17c7",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 440,
+        "y": 1316,
+        "wires": []
+    },
+    {
+        "id": "b5d1167c.d46dd8",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "pass thru",
+        "func": "msg.payload = msg.payload[0];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 263,
+        "y": 1314,
+        "wires": [
+            [
+                "2c1cffca.e17c7"
+            ]
+        ]
+    },
+    {
+        "id": "daf7d222.fe8fa",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "Get registers 0 to 99",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "0",
+        "quantity": "100",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 127,
+        "y": 33,
+        "wires": [
+            [
+                "dc1964c2.a53928"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a71a3954.5e3f68",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 591,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "dc1964c2.a53928",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Parse Registers",
+        "func": "msg.inverterEnabled       = msg.payload[parseInt(\"42\",16)];\nmsg.chargerEnabled        = msg.payload[parseInt(\"43\",16)];\nmsg.chargeModeStatus      = msg.payload[parseInt(\"46\",16)];\nmsg.inverterStatus        = msg.payload[parseInt(\"4B\",16)];\nmsg.batteryVoltage        = msg.payload[parseInt(\"4E\",16)]/1000;\nmsg.batteryCurrent        = msg.payload[parseInt(\"50\",16)]/1000;\nmsg.batteryPower          = msg.payload[parseInt(\"52\",16)];\nmsg.batteryTemperature    = (msg.payload[parseInt(\"54\",16)]/100-273)*(9/5)+32;\nmsg.chargerStatus         = msg.payload[parseInt(\"55\",16)];\nmsg.invertDCCurrent       = msg.payload[parseInt(\"56\",16)]/1000;\nmsg.invertDCPower         = msg.payload[parseInt(\"58\",16)];\nmsg.chargeDCCurrent       = msg.payload[parseInt(\"5A\",16)]/1000;\nmsg.chargeDCPower         = msg.payload[parseInt(\"5C\",16)];\nmsg.AC1Frequency          = msg.payload[parseInt(\"5F\",16)]/100;\nmsg.AC1Voltage            = msg.payload[parseInt(\"60\",16)]/1000;\nmsg.AC1InputCurrent       = msg.payload[parseInt(\"62\",16)]/1000;\n\nregisters  =  [\n\t{measurement:\"sw_inverterEnabled\"       , fields: {value:msg.inverterEnabled       }},\n\t{measurement:\"sw_chargerEnabled\"        , fields: {value:msg.chargerEnabled        }},\n\t{measurement:\"sw_chargeModeStatus\"      , fields: {value:msg.chargeModeStatus      }},\n\t{measurement:\"sw_inverterStatus\"        , fields: {value:msg.inverterStatus        }},\n\t{measurement:\"sw_batteryVoltage\"        , fields: {value:msg.batteryVoltage        }},\n\t{measurement:\"sw_batteryCurrent\"        , fields: {value:msg.batteryCurrent        }},\n\t{measurement:\"sw_batteryPower\"          , fields: {value:msg.batteryPower          }},\n\t{measurement:\"sw_batteryTemperature\"    , fields: {value:msg.batteryTemperature    }},\n\t{measurement:\"sw_chargerStatus\"         , fields: {value:msg.chargerStatus         }},\n\t{measurement:\"sw_invertDCCurrent\"       , fields: {value:msg.invertDCCurrent       }},\n\t{measurement:\"sw_invertDCPower\"         , fields: {value:msg.invertDCPower         }},\n\t{measurement:\"sw_chargeDCCurrent\"       , fields: {value:msg.chargeDCCurrent       }},\n\t{measurement:\"sw_chargeDCPower\"         , fields: {value:msg.chargeDCPower         }},\n\t{measurement:\"sw_AC1Frequency\"          , fields: {value:msg.AC1Frequency          }},\n\t{measurement:\"sw_AC1Voltage\"            , fields: {value:msg.AC1Voltage            }},\n\t{measurement:\"sw_AC1InputCurrent\"       , fields: {value:msg.AC1InputCurrent       }}\n]\nmsg.payload = registers;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 372,
+        "y": 26,
+        "wires": [
+            [
+                "a71a3954.5e3f68",
+                "cef3cb5d.6ee7e8"
+            ]
+        ]
+    },
+    {
+        "id": "cef3cb5d.6ee7e8",
+        "type": "influxdb batch",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "precision": "",
+        "retentionPolicy": "",
+        "name": "test",
+        "x": 503.5,
+        "y": 107,
+        "wires": []
+    },
+    {
+        "id": "a2555488.ac0b58",
+        "type": "modbus-read",
+        "z": "f0883d8e.25286",
+        "name": "Get registers 100 to 199",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "100",
+        "quantity": "100",
+        "rate": "5",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "bfeccbea.6c9668",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "x": 129,
+        "y": 173,
+        "wires": [
+            [
+                "6e88aaf4.ceab54"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "cf371300.aca55",
+        "type": "debug",
+        "z": "f0883d8e.25286",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 594,
+        "y": 163,
+        "wires": []
+    },
+    {
+        "id": "6e88aaf4.ceab54",
+        "type": "function",
+        "z": "f0883d8e.25286",
+        "name": "Parse Registers",
+        "func": "msg.AC1InputPower         = msg.payload[parseInt(\"64\",16)-100];\nmsg.AC1InputPowerApparent = msg.payload[parseInt(\"66\",16)-100];\nmsg.AC1L1Voltage          = msg.payload[parseInt(\"68\",16)-100]/1000;\nmsg.AC1L1Current          = msg.payload[parseInt(\"6E\",16)-100]/1000;\nmsg.AC1L2Voltage          = msg.payload[parseInt(\"6C\",16)-100]/1000;\nmsg.AC1L2Current          = msg.payload[parseInt(\"6A\",16)-100]/1000;\nmsg.loadACVoltage         = msg.payload[parseInt(\"78\",16)-100]/1000;\nmsg.loadACL1Voltage       = msg.payload[parseInt(\"7A\",16)-100]/1000;\nmsg.loadACL2Voltage       = msg.payload[parseInt(\"7C\",16)-100]/1000;\nmsg.loadACL1Current       = msg.payload[parseInt(\"7E\",16)-100]/1000;\nmsg.loadACL2Current       = msg.payload[parseInt(\"80\",16)-100]/1000;\nmsg.loadACCurrent         = msg.payload[parseInt(\"82\",16)-100]/1000;\nmsg.loadACPower           = msg.payload[parseInt(\"84\",16)-100]/1000;\nmsg.loadACPowerApparent   = msg.payload[parseInt(\"88\",16)-100]/1000;\nmsg.loadACFrequency       = msg.payload[parseInt(\"6A\",16)-100]/1000;\n\nregisters  =  [\n\t{measurement:\"sw_AC1InputPower\"         , fields: {value:msg.AC1InputPower         }},\n\t{measurement:\"sw_AC1InputPowerApparent\" , fields: {value:msg.AC1InputPowerApparent }},\n\t{measurement:\"sw_AC1L1Voltage\"          , fields: {value:msg.AC1L1Voltage          }},\n\t{measurement:\"sw_AC1L1Current\"          , fields: {value:msg.AC1L1Current          }},\n\t{measurement:\"sw_AC1L2Voltage\"          , fields: {value:msg.AC1L2Voltage          }},\n\t{measurement:\"sw_AC1L2Current\"          , fields: {value:msg.AC1L2Current          }},\n\t{measurement:\"sw_loadACVoltage\"         , fields: {value:msg.loadACVoltage         }},\n\t{measurement:\"sw_loadACL1Voltag\"        , fields: {value:msg.loadACL1Voltage       }},\n\t{measurement:\"sw_loadACL2Voltag\"        , fields: {value:msg.loadACL2Voltage       }},\n\t{measurement:\"sw_loadACL1Curren\"        , fields: {value:msg.loadACL1Current       }},\n\t{measurement:\"sw_loadACL2Curren\"        , fields: {value:msg.loadACL2Current       }},\n\t{measurement:\"sw_loadACCurrent\"         , fields: {value:msg.loadACCurrent         }},\n\t{measurement:\"sw_loadACPower\"           , fields: {value:msg.loadACPower           }},\n\t{measurement:\"sw_loadACPowerApparent\"   , fields: {value:msg.loadACPowerApparent   }},\n\t{measurement:\"sw_loadACFrequency\"       , fields: {value:msg.loadACFrequency       }}\n]\nmsg.payload = registers;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 364,
+        "y": 166,
+        "wires": [
+            [
+                "cf371300.aca55",
+                "203f4b8a.5a8f74"
+            ]
+        ]
+    },
+    {
+        "id": "203f4b8a.5a8f74",
+        "type": "influxdb batch",
+        "z": "f0883d8e.25286",
+        "influxdb": "bc68be3d.ca79d",
+        "precision": "",
+        "retentionPolicy": "",
+        "name": "test",
+        "x": 495.5,
+        "y": 247,
+        "wires": []
+    },
+    {
+        "id": "bfeccbea.6c9668",
+        "type": "modbus-client",
+        "z": "",
+        "name": "Combox",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "tcpHost": "192.168.1.139",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "unit_id": "90",
+        "commandDelay": "1",
+        "clientTimeout": "1000",
+        "reconnectTimeout": "2000"
+    },
+    {
+        "id": "bc68be3d.ca79d",
+        "type": "influxdb",
+        "z": "",
+        "hostname": "192.168.1.114",
+        "port": "8086",
+        "protocol": "http",
+        "database": "solar",
+        "name": "",
+        "usetls": false,
+        "tls": ""
+    }
+]
